@@ -1,0 +1,30 @@
+jenkins:
+  securityRealm:
+    local:
+      allowsSignup: false
+      users:
+        - id: test
+          password: test
+
+  authorizationStrategy:
+    globalMatrix:
+      permissions:
+        - "Overall/Read:anonymous"
+        - "Overall/Administer:authenticated"
+
+jobs:
+  - script: >
+      pipelineJob('dotnet_job') {
+        definition {
+          cpsScm {
+            scm {
+              git {
+                  remote {
+                      url('https://github.com/berviantoleo/dotnet-repo-jenkins.git')
+                  }
+                  branch('main')
+              }
+            }
+          }
+        }
+      }
